@@ -1,5 +1,0 @@
-[0m[[0m[0mdebug[0m] [0m[0mCreated transactional ClassFileManager with tempDir = /home/amirali671/Documents/A.Rehman/Shadow/target/out/jvm/scala-3.8.4/shadow-build-build/classes.bak[0m
-[0m[[0m[0mdebug[0m] [0m[0mAbout to delete class files:[0m
-[0m[[0m[0mdebug[0m] [0m[0mWe backup class files:[0m
-[0m[[0m[0mdebug[0m] [0m[0mCreated transactional ClassFileManager with tempDir = /home/amirali671/Documents/A.Rehman/Shadow/target/out/jvm/scala-3.8.4/shadow-build-build/classes.bak[0m
-[0m[[0m[0mdebug[0m] [0m[0mRemoving the temporary directory used for backing up class files: /home/amirali671/Documents/A.Rehman/Shadow/target/out/jvm/scala-3.8.4/shadow-build-build/classes.bak[0m
