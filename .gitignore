@@ -1,0 +1,16 @@
+# SBT / Scala generated files
+target/
+.bloop/
+.bsp/
+.metals/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Chisel test output
+test_run_dir/
+
+# Compiled files
+*.class
+*.log
