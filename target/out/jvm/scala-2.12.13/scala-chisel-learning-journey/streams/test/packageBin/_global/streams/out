@@ -1,0 +1,10 @@
+[0m[[0m[0mdebug[0m] [0m[0mPackaging /home/amirali671/Documents/A.Rehman/Shadow/target/out/jvm/scala-2.12.13/scala-chisel-learning-journey/scala-chisel-learning-journey_2.12-0.1.0-tests.jar ...[0m
+[0m[[0m[0mdebug[0m] [0m[0mInput file mappings:[0m
+[0m[[0m[0mdebug[0m] [0m[0m	CoreTest.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/amirali671/Documents/A.Rehman/Shadow/target/out/jvm/scala-2.12.13/scala-chisel-learning-journey/test-classes/CoreTest.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Multiplication_of_9.txt[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/amirali671/Documents/A.Rehman/Shadow/src/test/resources/Multiplication_of_9.txt[0m
+[0m[[0m[0mdebug[0m] [0m[0m	test.txt[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/amirali671/Documents/A.Rehman/Shadow/src/test/resources/test.txt[0m
+[0m[[0m[0mdebug[0m] [0m[0mDone packaging.[0m
+[0m[[0m[0mdebug[0m] [0m[0mwrote ${OUT}/jvm/scala-2.12.13/scala-chisel-learning-journey/scala-chisel-learning-journey_2.12-0.1.0-tests.jar[0m
