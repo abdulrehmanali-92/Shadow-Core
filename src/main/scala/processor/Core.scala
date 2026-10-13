@@ -8,13 +8,12 @@ class Core(initFile: String) extends Module {
 
   val io = IO(new Bundle {
     val out = Output(UInt(32.W))
-    val instr = Output(UInt(32.W))
+    // val instr = Output(UInt(32.W))
   })
-  io.out := 0.U
 
   val pc = Module(new PC)
   val reg_file = Module(new RegisterFile)
-  // val memory = Module(new Memory(initFile))
+  val memory = Module(new Memory(initFile))
   val controller = Module(new Controller)
   val imm_gen = Module(new ImmGen)
   val alu = Module(new ALU)
@@ -23,18 +22,18 @@ class Core(initFile: String) extends Module {
   val instr_decoder = Module(new InstrDecoder)
   val jalr_adder = Module(new JALRAdder)
 
-  val mem = Mem(1024, UInt(32.W))
-  io.instr := mem(pc.io.addr(11, 2))
-  loadMemoryFromFile(
-    mem,
-    initFile
-  )
+  // val mem = Mem(1024, UInt(32.W))
+  // io.instr := mem(pc.io.addr(11, 2))
+  // loadMemoryFromFile(
+  //   mem,
+  //   initFile
+  // )
 
   // PC --> Instruction Memory
-  // pc.io.addr <> memory.io.addr
+  pc.io.addr <> memory.io.addr
 
   // Instruction Memory --> Instruction Decoder
-  instr_decoder.io.instr := io.instr
+  instr_decoder.io.instr := memory.io.instr
 
   // Instruction Decoder --> Controller
   instr_decoder.io.opcode <> controller.io.opcode
@@ -114,4 +113,7 @@ class Core(initFile: String) extends Module {
   )
 
   reg_file.io.reg_write := controller.io.out.reg_write
+
+  io.out := memory.io.instr
+
 }
