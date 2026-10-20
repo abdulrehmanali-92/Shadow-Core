@@ -9,7 +9,7 @@ class CoreTest extends FreeSpec with ChiselScalatestTester {
   "Tesing Core" in {
     test(
       new Core(
-        "/home/amirali671/Documents/A.Rehman/Shadow/src/test/resources/Mul-9.txt"
+        "src/test/resources/Mul-9.txt"
       )
     ) { dut =>
       dut.clock.step(100)
