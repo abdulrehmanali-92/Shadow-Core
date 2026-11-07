@@ -8,7 +8,7 @@ class PC extends Module {
     val addr = Output(UInt(32.W))
   })
 
-  val reg = RegNext(0.U(32.W))
+  val reg = RegInit(0.U(32.W))
   reg := io.pc_in
   io.pc_out := reg + 4.U
   io.addr := reg

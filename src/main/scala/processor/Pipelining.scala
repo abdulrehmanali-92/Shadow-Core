@@ -7,8 +7,6 @@ import chisel3.util.experimental.loadMemoryFromFile
 class Pipelining(initFile: String) extends Module {
   val io = IO(new Bundle {
     val out = Output(UInt(96.W))
-    val debug_pc = Output(UInt(32.W))
-    val debug_regs = Output(Vec(32, SInt(32.W)))
   })
 
   val pc = Module(new PC)
@@ -60,14 +58,22 @@ class Pipelining(initFile: String) extends Module {
       reg_file.io.read_data_1.asUInt(), // 73-104    Read Data 1
       reg_file.io.read_data_2.asUInt(), // 41-72     Read Data 2
       if_id_reg(75, 71), // 36-40                    RD
-      MuxLookup(
-        controller.io.out.extend_sel,
-        false.B,
-        Seq(
-          (0.U) -> (imm_gen.io.out.i_type),
-          (1.U) -> (imm_gen.io.out.s_type),
-          (2.U) -> (imm_gen.io.out.u_type),
-          (3.U) -> 0.S
+      Mux(
+        controller.io.out.next_pc === 1.U,
+        imm_gen.io.out.uj_type,
+        Mux(
+          controller.io.out.next_pc === 3.U,
+          imm_gen.io.out.sb_type,
+          MuxLookup(
+            controller.io.out.extend_sel,
+            0.S,
+            Seq(
+              (0.U) -> (imm_gen.io.out.i_type),
+              (1.U) -> (imm_gen.io.out.s_type),
+              (2.U) -> (imm_gen.io.out.u_type),
+              (3.U) -> 0.S
+            )
+          )
         )
       ).asUInt(), // 4-35                            immediate
       if_id_reg(78, 76), // 1-3                      func3
@@ -78,12 +84,12 @@ class Pipelining(initFile: String) extends Module {
   // Execute
   alu.io.operand_a := MuxLookup(
     id_ex_reg(113, 112), // operand a sel
-    0.U(32.W),
+    0.S,
     Seq(
       (0.U) -> id_ex_reg(104, 73).asSInt, // Read Data 1
       (1.U) -> id_ex_reg(181, 150).asSInt, // PC
       (2.U) -> id_ex_reg(149, 118).asSInt, // PC + 4
-      (3.U) -> id_ex_reg(104, 73).asSInt // Read Data 1
+      (3.U) -> 0.S // 0 for LUI
     )
   )
   alu.io.operand_b := Mux(
@@ -121,23 +127,27 @@ class Pipelining(initFile: String) extends Module {
   )
   // Memory
 
-  pc.io.pc_in := MuxLookup(
-    ex_mem_reg(135, 134),
-    0.U(32.W),
-    Seq(
-      (0.U) -> ex_mem_reg(172, 141), //  PC + 4
-      (1.U) -> ex_mem_reg(96, 65), //  Immediate
-      (2.U) -> ex_mem_reg(64, 33), //  JALR Address
-      (3.U) -> Mux(
-        ex_mem_reg(32),
-        ex_mem_reg(96, 65),
-        ex_mem_reg(172, 141)
-      ) //  Branch
-    )
+  val branch_taken = (ex_mem_reg(135, 134) === 3.U) && ex_mem_reg(32)
+  val is_jal = (ex_mem_reg(135, 134) === 1.U)
+  val is_jalr = (ex_mem_reg(135, 134) === 2.U)
+  val redirect_pc = is_jal || is_jalr || branch_taken
+
+  pc.io.pc_in := Mux(
+    redirect_pc,
+    MuxLookup(
+      ex_mem_reg(135, 134),
+      pc.io.pc_out,
+      Seq(
+        (1.U) -> ex_mem_reg(96, 65), // JAL Target
+        (2.U) -> ex_mem_reg(64, 33), // JALR Target
+        (3.U) -> ex_mem_reg(96, 65) // Branch Target
+      )
+    ),
+    pc.io.pc_out // Sequential PC + 4
   )
 
   data_mem.io.in.data_in := ex_mem_reg(133, 102).asSInt
-  data_mem.io.in.addr := ex_mem_reg(31, 0)
+  data_mem.io.in.addr := ex_mem_reg(6, 2)
   data_mem.io.in.mem_read := ex_mem_reg(138)
   data_mem.io.in.mem_write := ex_mem_reg(139)
 
@@ -162,7 +172,5 @@ class Pipelining(initFile: String) extends Module {
   )
 
   io.out := if_id_reg
-  io.debug_pc := pc.io.addr
-  io.debug_regs := reg_file.io.debug_regs
 
 }

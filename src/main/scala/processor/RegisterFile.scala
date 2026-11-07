@@ -16,7 +16,7 @@ class RegisterFile extends Module {
     val read_data_2 = Output(SInt(32.W))
     val debug_regs = Output(Vec(32, SInt(32.W)))
   })
-  val RegFile = Reg(Vec(32, SInt(32.W)))
+  val RegFile = RegInit(VecInit(Seq.fill(32)(0.S(32.W))))
   io.debug_regs := RegFile
 
   io.read_data_1 := Mux(

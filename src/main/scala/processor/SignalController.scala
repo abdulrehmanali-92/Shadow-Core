@@ -24,7 +24,7 @@ class SignalController extends Module {
   val next_pc_selector = Module(new Selector3To2())
   val alu_op_selector = Module(new AluOpSelector())
 
-  io.out.reg_write := io.in.i_type | io.in.r_type | io.in.load_type | io.in.lui_type | io.in.uj_type | io.in.jalr_type
+  io.out.reg_write := io.in.i_type | io.in.r_type | io.in.load_type | io.in.lui_type | io.in.uj_type | io.in.jalr_type | io.in.auipc_type
   io.out.mem_write := io.in.s_type
   io.out.mem_read := io.in.load_type
   io.out.mem_to_reg := io.in.load_type

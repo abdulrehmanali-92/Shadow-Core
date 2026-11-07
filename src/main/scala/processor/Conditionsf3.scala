@@ -1,3 +1,5 @@
+package processor
+
 import chisel3._
 object Conditionsf3 {
   val BEQ = 0.U(3.W)

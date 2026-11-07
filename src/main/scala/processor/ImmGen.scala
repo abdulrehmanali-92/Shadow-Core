@@ -29,7 +29,7 @@ class ImmGen extends Module {
   ).asSInt
 
   io.out.sb_type := Cat(
-    Fill(20, Mux(io.instr(31), 1.U, 0.U)),
+    Fill(19, Mux(io.instr(31), 1.U, 0.U)),
     io.instr(31),
     io.instr(7),
     io.instr(30, 25),

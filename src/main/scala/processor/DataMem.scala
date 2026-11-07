@@ -18,12 +18,12 @@ class DataMem extends Module {
 
   val DataMem = Mem(32, SInt(32.W))
 
+  io.data := 0.S
+
   when(io.in.mem_write) {
     DataMem.write(io.in.addr, io.in.data_in)
   }.elsewhen(io.in.mem_read) {
     io.data := DataMem.read(io.in.addr)
   }
-
-  io.data := DontCare
 
 }
